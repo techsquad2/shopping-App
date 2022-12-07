@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "My products",
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -43,6 +44,7 @@ class _HomepageState extends State<Homepage> {
         Product product = Product(
             title: i['title'],
             id: i['id'],
+            price: i['price'],
             
             description: i['description'],
             category: i['category'],
@@ -60,9 +62,34 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('search'),
+        actions: [
+          IconButton(onPressed:(){}
+            
+          , icon: Icon(Icons.shopping_cart,size:30,color: Colors.white,)
+       ) ],
+      
+        title: Container(
+          decoration: BoxDecoration(color: Color.fromARGB(255, 138, 197, 240),
+          borderRadius: BorderRadius.circular(30)),
+          
+          child: TextField(
+           
+           decoration: InputDecoration(
+            icon: Icon(Icons.search),
+             border: InputBorder .none ,
+             errorBorder: InputBorder .none ,
+             enabledBorder: InputBorder .none ,
+             focusedBorder: InputBorder .none ,
+             contentPadding: EdgeInsets . all(15),
+             hintText: 'search'
+
+          
+           
+           ))
       ),
-      body: Column(
+      ),
+    
+        body: Column(
         children: [
           Expanded(
             child: FutureBuilder(
@@ -72,6 +99,7 @@ class _HomepageState extends State<Homepage> {
                       itemCount: productList.length,
                       itemBuilder: (context, index) {
                         return Card(
+                          elevation: 15,
                           child: ListTile(
                          leading :Container(child: Image.network(
                               snapshot.data![index].image.toString()),
@@ -95,16 +123,19 @@ class _HomepageState extends State<Homepage> {
 
                               ),),
                           
-                         subtitle : Text(snapshot.data![index].description.toString()),
+                         subtitle : Text(snapshot.data![index].category.toString()),
                          title: Text(snapshot.data![index].title.toString(),
                          textScaleFactor: 1.0,
                          style: TextStyle(
                           color: Colors.indigo,
-                          fontWeight: FontWeight.w300,)
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                          fontSize: 15)
 
                          ),
 
                          
+                       trailing:Text( 'Price:${snapshot.data![index].price}' )
                         ));
                       });
                 }),
@@ -116,17 +147,17 @@ class _HomepageState extends State<Homepage> {
 }
 
 class Product {
-  int? id;
+  num? id;
   String? title;
-  
+  num? price;
   String? description;
   String? category;
   String? image;
-  Product({this.id, this.title, this.description, this.category, this.image});
+  Product({this.id, this.title,this.price, this.description, this.category, this.image});
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
         title: json['title'].toString(),
-        description: json['description'],
+        description: json['description'].toString(),
         category: json['category'].toString(),
         image: json['image'].toString());
   }
